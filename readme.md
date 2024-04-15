@@ -1,6 +1,6 @@
 # Full-Stack JWT-Authenticated Application
 
-![Image](https://github.com/MMMorpheus/jwt-auth/tree/master/jwt-auth.png)
+![Image](https://github.com/MMMorpheus/jwt-auth/blob/master/jwt-auth.png)
 
 ## Introduction
 
