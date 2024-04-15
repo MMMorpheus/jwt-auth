@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  firstName      String   @map("first_name") @db.VarChar(128)
+  lastName       String   @map("last_name") @db.VarChar(128)
+  email          String   @unique @db.VarChar(256)
+  passwordHash   String   @map("password_hash") @db.VarChar(256)
+  avatarUrl      String?  @default("null") @map("avatar_url") @db.VarChar(256)
+  role           Role     @default(user)
+  activationLink String   @map("activation_link") @db.VarChar(128)
+  isActivated    Boolean  @default(false) @map("is_email_confirmed")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  refreshSessions RefreshSession[]
+
+  @@map("users")
+}
+
+model RefreshSession {
+  token       String
+  fingerprint String
+  createdAt   DateTime @default(now()) @map("created_at")
+  expiresAt   DateTime @map("expires_at")
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("user_id")
+
+  @@id([token, fingerprint])
+  @@map("refresh_sessions")
+}
+
+enum Role {
+  user
+  admin
+}
